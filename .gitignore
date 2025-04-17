@@ -1,0 +1,33 @@
+# === Python ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pdb
+*.egg
+*.egg-info/
+dist/
+build/
+*.log
+
+# === Environnement virtuel ===
+env/
+venv/
+ENV/
+.venv/
+env.bak/
+
+# === Flask / dotenv ===
+instance/
+*.db
+*.sqlite3
+*.env
+
+# === VS Code / IDEs ===
+.vscode/
+.idea/
+
+# === macOS / Linux / Windows ===
+.DS_Store
+Thumbs.db
