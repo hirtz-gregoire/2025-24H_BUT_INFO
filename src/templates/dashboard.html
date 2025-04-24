@@ -18,10 +18,10 @@
           {{ task.title }}
         </span>
         <div class="flex gap-2">
-          <a href="{{ url_for('toggle_task', task_id=task.id) }}" class="text-blue-500 hover:underline">
+          <a href="{{ url_for('task.toggle_task', task_id=task.id) }}" class="text-blue-500 hover:underline">
             {% if task.done %}✅{% else %}🔲{% endif %}
           </a>
-          <a href="{{ url_for('delete_task', task_id=task.id) }}" class="text-red-500 hover:underline">
+          <a href="{{ url_for('task.delete_task', task_id=task.id) }}" class="text-red-500 hover:underline">
             🗑️
           </a>
         </div>
@@ -31,5 +31,5 @@
     {% endfor %}
   </ul>
 
-  <a href="{{ url_for('logout') }}" class="mt-6 text-red-600 underline block">Se déconnecter</a>
+  <a href="{{ url_for('auth.logout') }}" class="mt-6 text-red-600 underline block">Se déconnecter</a>
 {% endblock %}

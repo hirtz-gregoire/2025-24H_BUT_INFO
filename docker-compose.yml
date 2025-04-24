@@ -1,0 +1,16 @@
+services:
+  app-dev:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dev
+    container_name: flask-todo-dev
+    volumes:
+      - ./src:/app/src
+      - ./instance:/app/instance
+    ports:
+      - "${PORT}:${PORT}"
+    environment:
+      - SECRET_KEY=${SECRET_KEY:-votre_cle_secrete_ici}
+      - FLASK_APP=src/app.py
+      - PORT=${PORT}
+      - PYTHONPATH=/app

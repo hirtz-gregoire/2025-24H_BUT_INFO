@@ -1,0 +1,19 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir watchdog[watchmedo]
+
+COPY . .
+
+ENV FLASK_APP=src/app.py
+ENV FLASK_ENV=development
+ENV FLASK_DEBUG=1
+ENV PORT=5000
+ENV PYTHONPATH=/app
+
+EXPOSE ${PORT}
+
+CMD ["sh", "-c", "watchmedo auto-restart --directory=./ --pattern=*.py --recursive -- python -m src.app"]
