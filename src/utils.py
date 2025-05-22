@@ -6,6 +6,6 @@ def anonymous_required(view_function):
     @wraps(view_function)
     def decorated_function(*args, **kwargs):
         if current_user.is_authenticated:
-            return redirect(url_for('task.dashboard'))
+            return redirect(url_for('index'))
         return view_function(*args, **kwargs)
     return decorated_function

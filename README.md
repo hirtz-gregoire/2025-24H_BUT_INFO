@@ -71,3 +71,28 @@ Pour déployer cette application avec Coolify :
 
 - `SECRET_KEY` : Clé secrète pour Flask
 - `PORT` : Port pour les environnements de développement et production
+
+## Gestion de la base de données
+
+### Réinitialisation de la base de données
+
+Un script est fourni pour réinitialiser la base de données sans avoir à reconstruire l'image Docker ou redémarrer le conteneur :
+
+```bash
+# Rendre le script exécutable (si ce n'est pas déjà fait)
+chmod +x reset_database.sh
+
+# Exécuter le script pour réinitialiser la base de données
+./reset_database.sh
+```
+
+Ce script vérifie d'abord si le conteneur est en cours d'exécution, puis exécute le script de réinitialisation de la base de données à l'intérieur du conteneur.
+
+### Workflow recommandé
+
+1. Démarrer le conteneur avec `docker-compose up -d`
+2. Travailler sur l'application (les modifications sont automatiquement détectées)
+3. Si nécessaire, réinitialiser la base de données avec `./reset_database.sh`
+4. Continuer à travailler sans avoir à reconstruire l'image ou redémarrer le conteneur
+
+Cette approche permet de gagner du temps lors du développement en évitant de reconstruire l'image Docker à chaque fois que vous avez besoin de réinitialiser la base de données.

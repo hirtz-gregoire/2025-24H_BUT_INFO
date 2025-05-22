@@ -5,7 +5,53 @@
   <title>{% block title %}Flask App{% endblock %}</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-6">
-  {% block content %}{% endblock %}
+<body class="bg-gray-100 min-h-screen">
+  <header class="bg-white shadow-md">
+    <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+      <a href="{{ url_for('index') }}" class="text-xl font-bold text-blue-600">Mon Site</a>
+      
+      <div class="flex items-center space-x-4">
+        {% if current_user.is_authenticated %}
+          <div class="text-gray-700 border border-gray-400 rounded-full p-1">
+            <img src="{{ url_for('static', filename='icone/profile.svg') }}" alt="Profil" class="h-8 w-8" loading="lazy">
+          </div>
+        {% endif %}
+
+        <a href="{{ url_for('view_cart') }}" class="text-gray-700 border border-gray-400 rounded p-1 relative">
+          <img src="{{ url_for('static', filename='icone/cart.svg') }}" alt="Panier" class="h-8 w-8" loading="lazy">
+          <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+        </a>
+        
+        {% if current_user.is_authenticated %}
+          <a href="{{ url_for('auth.logout') }}" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md">Déconnexion</a>
+        {% else %}
+          <a href="{{ url_for('auth.login') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">Connexion</a>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+  
+  <main class="container mx-auto p-6">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% block scripts %}{% endblock %}
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const response = await fetch('/api/cart/count');
+        const data = await response.json();
+        const cartCountElement = document.getElementById('cart-count');
+        
+        if (cartCountElement) {
+          cartCountElement.textContent = data.count;
+          cartCountElement.classList.toggle('hidden', data.count === 0);
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération du nombre d'articles :", error);
+      }
+    });
+  </script>
 </body>
 </html>

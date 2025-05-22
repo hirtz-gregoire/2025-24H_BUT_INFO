@@ -1,0 +1,78 @@
+{
+  "users": [
+    {
+      "username": "admin",
+      "password": "admin123",
+      "active_cart_id": 1
+    },
+    {
+      "username": "user1",
+      "password": "password1",
+      "active_cart_id": 2
+    },
+    {
+      "username": "user2",
+      "password": "password2",
+      "active_cart_id": 3
+    }
+  ],
+  "products": [
+    {
+      "name": "Ordinateur portable",
+      "price": 999.99,
+      "description": "Ordinateur portable haute performance avec processeur i7, 16 Go de RAM et SSD de 512 Go."
+    },
+    {
+      "name": "Smartphone",
+      "price": 699.99,
+      "description": "Smartphone dernière génération avec écran OLED 6.5 pouces, appareil photo 48MP et batterie longue durée."
+    },
+    {
+      "name": "Tablette",
+      "price": 349.99,
+      "description": "Tablette tactile légère et performante avec écran 10 pouces, idéale pour le multimédia et la productivité."
+    },
+    {
+      "name": "Casque audio",
+      "price": 149.99,
+      "description": "Casque audio sans fil avec réduction de bruit active et autonomie de 30 heures."
+    },
+    {
+      "name": "Clavier mécanique",
+      "price": 89.99,
+      "description": "Clavier mécanique rétroéclairé avec switches Cherry MX, parfait pour le gaming et la frappe intensive."
+    },
+    {
+      "name": "Souris gaming",
+      "price": 59.99,
+      "description": "Souris gaming ergonomique avec capteur optique haute précision et boutons programmables."
+    },
+    {
+      "name": "Moniteur 27 pouces",
+      "price": 249.99,
+      "description": "Moniteur 27 pouces QHD avec taux de rafraîchissement de 144Hz, idéal pour le gaming et le travail graphique."
+    },
+    {
+      "name": "Disque dur externe",
+      "price": 79.99,
+      "description": "Disque dur externe de 2To, compact et rapide avec connexion USB 3.0."
+    }
+  ],
+  "carts": [
+    {
+      "user_id": 1,
+      "is_active": true,
+      "products": [1, 3, 5]
+    },
+    {
+      "user_id": 2,
+      "is_active": true,
+      "products": [2, 4]
+    },
+    {
+      "user_id": 3,
+      "is_active": true,
+      "products": [6, 7, 8]
+    }
+  ]
+}

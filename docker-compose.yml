@@ -6,7 +6,6 @@ services:
     container_name: flask-todo-dev
     volumes:
       - ./src:/app/src
-      - ./instance:/app/instance
     ports:
       - "${PORT}:${PORT}"
     environment:

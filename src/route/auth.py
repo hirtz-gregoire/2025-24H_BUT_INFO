@@ -1,7 +1,7 @@
 from flask import Blueprint, request, redirect, url_for, render_template, flash
 from flask_login import login_required, current_user, login_user, logout_user
 from src.utils import anonymous_required
-from src.models import db, User, Task
+from src.orm.models import db, User
 from werkzeug.security import generate_password_hash, check_password_hash
 
 auth_bp = Blueprint('auth', __name__)
@@ -12,8 +12,8 @@ def login():
     if request.method == 'POST':
         user = User.query.filter_by(username=request.form['username']).first()
         if user and check_password_hash(user.password, request.form['password']):
-            login_user(user)
-            return redirect(url_for('task.dashboard'))
+            login_user(user)  # ajouter remember=True si besoin de coockie longue durée
+            return redirect(url_for('index'))
         flash("Nom d'utilisateur ou mot de passe incorrect.", "error")
     return render_template('login.html')
 
@@ -33,7 +33,7 @@ def register():
         db.session.add(new_user)
         db.session.commit()
         flash("Compte créé avec succès. Connectez-vous.", "success")
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('index'))
 
     return render_template('register.html')
 

@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+{% block title %}Mon Panier{% endblock %}
+{% block content %}
+  <div class="bg-white shadow-md rounded-lg p-6">
+    <h2 class="text-2xl font-bold mb-6">Mon Panier</h2>
+    
+    {% if cart_items %}
+      <div class="space-y-4 mb-6">
+        {% for item in cart_items %}
+          <div class="flex justify-between items-center border-b pb-4">
+            <div>
+              <h3 class="font-semibold text-lg">{{ item.name }}</h3>
+              <p class="text-gray-600">{{ item.price }}€</p>
+            </div>
+            <button class="remove-from-cart bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded" 
+                    data-product-id="{{ item.id }}">
+              Supprimer
+            </button>
+          </div>
+        {% endfor %}
+      </div>
+      
+      <div class="flex justify-between items-center border-t pt-4">
+        <span class="font-bold text-xl">Total:</span>
+        <span class="font-bold text-xl text-blue-600">{{ total }}€</span>
+      </div>
+      
+      <div class="mt-6 flex justify-end">
+        <button id="checkout-btn" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg">
+          Passer la commande
+        </button>
+      </div>
+    {% else %}
+      <div class="text-center py-8">
+        <p class="text-gray-600 mb-4">Votre panier est vide</p>
+        <a href="{{ url_for('index') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded inline-block">
+          Continuer vos achats
+        </a>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Gestion des boutons de suppression
+    const removeButtons = document.querySelectorAll('.remove-from-cart');
+    
+    removeButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const productId = this.getAttribute('data-product-id');
+        
+        // Appel API pour supprimer le produit du panier
+        fetch(`/api/cart/remove/${productId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Recharger la page pour mettre à jour le panier
+            window.location.reload();
+          } else {
+            alert(data.message || 'Erreur lors de la suppression du produit');
+          }
+        })
+        .catch(error => {
+          console.error('Erreur:', error);
+          alert('Une erreur est survenue lors de la suppression du produit');
+        });
+      });
+    });
+    
+    // Gestion du bouton de commande
+    const checkoutBtn = document.getElementById('checkout-btn');
+    if (checkoutBtn) {
+      checkoutBtn.addEventListener('click', function() {
+        alert('Fonctionnalité de commande à implémenter');
+      });
+    }
+  });
+</script>
+{% endblock %}

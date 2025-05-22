@@ -1,0 +1,118 @@
+{% macro render_product_card(product) %}
+  <div class="product-card p-4 bg-blue-500 text-white rounded shadow cursor-pointer transition-transform transform hover:scale-105 hover:bg-blue-600" data-product-id="{{ product.id }}">
+    <h3 class="text-lg font-semibold">{{ product.name }}</h3>
+    <p class="mt-2">{{ product.price }}€</p>
+  </div>
+{% endmacro %}
+
+
+{% macro render_product_modal() %}
+<div id="product-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+  <div class="bg-white text-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
+    <div class="flex justify-between items-center mb-4">
+      <h2 id="modal-product-name" class="text-xl font-bold"></h2>
+      <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+        <img src="{{ url_for('static', filename='icone/close.svg') }}" alt="Fermer" class="h-6 w-6">
+      </button>
+    </div>
+    <div class="mb-4">
+      <p id="modal-product-price" class="text-lg font-semibold text-blue-600"></p>
+    </div>
+    <div class="mb-6">
+      <p id="modal-product-description" class="text-gray-700"></p>
+    </div>
+    <div class="flex justify-end">
+      <button id="add-to-cart" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+        Ajouter au panier
+      </button>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro product_scripts() %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Récupérer tous les éléments de carte de produit
+    const productCards = document.querySelectorAll('.product-card');
+    const modal = document.getElementById('product-modal');
+    const closeModalBtn = document.getElementById('close-modal');
+    const modalProductName = document.getElementById('modal-product-name');
+    const modalProductPrice = document.getElementById('modal-product-price');
+    const modalProductDescription = document.getElementById('modal-product-description');
+    const addToCartBtn = document.getElementById('add-to-cart');
+    
+    // Variable pour stocker l'ID du produit actuellement affiché
+    let currentProductId;
+    
+    // Ajouter un écouteur d'événement à chaque carte
+    productCards.forEach(card => {
+      card.addEventListener('click', function() {
+        currentProductId = this.getAttribute('data-product-id');
+        
+        // Récupérer les données du produit via une requête fetch
+        fetch(`/api/product/${currentProductId}`)
+          .then(response => response.json())
+          .then(product => {
+            // Remplir le modal avec les données du produit
+            modalProductName.textContent = product.name;
+            modalProductPrice.textContent = `${product.price}€`;
+            modalProductDescription.textContent = product.description;
+            
+            // Afficher le modal
+            modal.classList.remove('hidden');
+          })
+          .catch(error => {
+            console.error('Erreur lors de la récupération des données du produit:', error);
+          });
+      });
+    });
+    
+    // Fermer le modal au clic sur le bouton de fermeture
+    closeModalBtn.addEventListener('click', function() {
+      modal.classList.add('hidden');
+    });
+    
+    // Fermer le modal au clic en dehors du contenu du modal
+    modal.addEventListener('click', function(event) {
+      if (event.target === modal) {
+        modal.classList.add('hidden');
+      }
+    });
+    
+    // Ajouter au panier
+    addToCartBtn.addEventListener('click', function() {
+      // Utiliser l'ID du produit actuellement affiché dans la modal
+      
+      // Appel API pour ajouter le produit au panier
+      fetch(`/api/cart/add/${currentProductId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Afficher un message de succès
+          alert(data.message);
+          
+          // Mettre à jour le compteur du panier
+          if (typeof updateCartCount === 'function') {
+            updateCartCount();
+          }
+          
+          // Fermer le modal
+          modal.classList.add('hidden');
+        } else {
+          alert(data.message || 'Erreur lors de l\'ajout au panier');
+        }
+      })
+      .catch(error => {
+        console.error('Erreur:', error);
+        alert('Une erreur est survenue lors de l\'ajout au panier');
+      });
+    });
+  });
+</script>
+{% endmacro %}
