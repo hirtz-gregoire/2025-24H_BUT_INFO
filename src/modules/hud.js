@@ -19,15 +19,7 @@ class GestionnaireHUD {
     
     container.innerHTML = `
       <div class="p-4 space-y-4">
-        <div id="hud-toggle" class="glassmorphism rounded-lg p-3 cursor-pointer hover:bg-opacity-90 transition-all">
-          <div class="flex items-center space-x-2">
-            <span class="text-neon-cyan">📍</span>
-            <span class="font-medium">Mission</span>
-            <span id="toggle-icon" class="text-neon-rose">▼</span>
-          </div>
-        </div>
-        
-        <div id="hud-content" class="glassmorphism rounded-lg p-4 space-y-4 transform transition-all duration-300 origin-top scale-y-0">
+        <div id="hud-content" class="glassmorphism rounded-lg p-4 space-y-4">
           <div class="flex items-center justify-between">
             <h3 class="text-lg font-semibold text-neon-rose glow-text">Lieux à découvrir</h3>
           </div>
@@ -39,22 +31,6 @@ class GestionnaireHUD {
   }
 
   configurerEvenements() {
-    const toggle = document.getElementById('hud-toggle');
-    const content = document.getElementById('hud-content');
-    const toggleIcon = document.getElementById('toggle-icon');
-
-    toggle.addEventListener('click', () => {
-      this.hudVisible = !this.hudVisible;
-      
-      if (this.hudVisible) {
-        gsap.to(content, { scaleY: 1, duration: 0.3, ease: 'power2.out' });
-        toggleIcon.textContent = '▲';
-      } else {
-        gsap.to(content, { scaleY: 0, duration: 0.3, ease: 'power2.in' });
-        toggleIcon.textContent = '▼';
-      }
-    });
-
     window.addEventListener('streetview-pret', (event) => {
       this.initialiserMission(event.detail);
     });
@@ -70,7 +46,7 @@ class GestionnaireHUD {
     
     this.mettreAJourListePoi();
     
-    gsap.to('#hud-toggle', { 
+    gsap.to('#hud-content', { 
       opacity: 1, 
       y: 0, 
       duration: 0.5, 
@@ -107,6 +83,12 @@ class GestionnaireHUD {
         
         if (window.gestionnaireStreetView) {
           window.gestionnaireStreetView.teleporterVers(lat, lng, heading, pitch);
+          
+          // Afficher les informations du POI lorsqu'on clique sur un lieu
+          const poiInfo = this.poiActuels.find(p => p.id === poiId);
+          if (poiInfo && window.gestionnaireModal) {
+            window.gestionnaireModal.afficherModalPoi(poiInfo);
+          }
         }
       });
     });
