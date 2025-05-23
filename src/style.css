@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background: #0d0d0d;
+    color: white;
+    overflow: hidden;
+  }
+}
+
+@layer components {
+  .btn-neon {
+    @apply px-6 py-3 bg-transparent border-2 border-neon-rose text-neon-rose font-medium rounded-lg transition-all duration-300 hover:bg-neon-rose hover:text-white hover:shadow-lg;
+    box-shadow: 0 0 20px rgba(247, 37, 133, 0.3);
+  }
+  
+  .btn-neon:hover {
+    box-shadow: 0 0 30px rgba(247, 37, 133, 0.6);
+  }
+  
+  .glassmorphism {
+    background: rgba(13, 13, 13, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .glow-text {
+    text-shadow: 0 0 10px currentColor;
+  }
+  
+  .neon-border {
+    border: 2px solid;
+    border-image: linear-gradient(45deg, #f72585, #3a86ff, #7209b7) 1;
+  }
+}
+
+@layer utilities {
+  .text-shadow-glow {
+    text-shadow: 0 0 20px currentColor;
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+.streetview-controls {
+  display: none !important;
+}
+
+.gm-style-cc {
+  display: none !important;
+}
+
+.gm-bundled-control {
+  display: none !important;
+}

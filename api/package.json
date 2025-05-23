@@ -1,0 +1,25 @@
+{
+  "name": "lumiere-sur-lyon-api",
+  "version": "1.0.0",
+  "description": "API backend pour Lumière sur Lyon",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "migrate": "npx prisma migrate dev",
+    "generate": "npx prisma generate",
+    "studio": "npx prisma studio"
+  },
+  "dependencies": {
+    "express": "^5.0.0",
+    "cors": "^2.8.5",
+    "express-rate-limit": "^7.1.5",
+    "prisma": "^5.7.0",
+    "@prisma/client": "^5.7.0",
+    "helmet": "^7.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
