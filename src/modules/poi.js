@@ -1,6 +1,20 @@
 export const chargeurPoi = {
   async chargerPoi() {
-    return this.obtenirPoiParDefault();
+    try {
+      // In production, try to load from poi.json
+      if (import.meta.env.PROD) {
+        const response = await fetch('/poi.json');
+        if (response.ok) {
+          const data = await response.json();
+          return data;
+        }
+      }
+      // Fall back to default data if not in production or if fetch fails
+      return this.obtenirPoiParDefault();
+    } catch (error) {
+      console.error('Error loading POI data:', error);
+      return this.obtenirPoiParDefault();
+    }
   },
 
   obtenirPoiParDefault() {

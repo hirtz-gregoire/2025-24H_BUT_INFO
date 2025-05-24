@@ -7,7 +7,7 @@ Visite virtuelle de Lyon façon GeoGuessr, centrée sur le Vieux-Lyon illuminé 
 - Navigation Street View 360° - Exploration immersive de Lyon de nuit
 - Mission gamifiée - 5 POI à découvrir avec système de checkpoints
 - Design néon - Interface sombre avec effets lumineux
-- Responsive & accessible - Compatible mobile et normes a11y
+- Responsive & accessible
 
 ## Architecture
 
