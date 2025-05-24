@@ -19,19 +19,13 @@ class GestionnaireModal {
         <div id="modal-content" class="glassmorphism rounded-xl max-w-2xl w-full mx-4 p-6 transform scale-95 transition-transform duration-300 z-[10000]">
           <div class="flex justify-between items-start mb-4">
             <h2 id="modal-titre" class="text-2xl font-bold text-neon-rose glow-text"></h2>
-            <button id="modal-fermer" class="text-gray-400 hover:text-white text-2xl z-50 relative" aria-label="Fermer">×</button>
+            <button id="modal-fermer" class="text-gray-400 hover:text-white text-4xl z-50 relative" aria-label="Fermer">×</button>
           </div>
 
           <div id="modal-body" class="space-y-4">
             <div id="modal-image" class="w-full h-48 bg-sombre-800 rounded-lg overflow-hidden"></div>
             <p id="modal-description" class="text-gray-300 leading-relaxed"></p>
             <div id="modal-video" class="w-full h-64 bg-sombre-800 rounded-lg overflow-hidden"></div>
-          </div>
-
-          <div class="mt-6 flex justify-center">
-            <button id="modal-continuer" class="btn-neon px-8 py-3">
-              Continuer l'exploration
-            </button>
           </div>
         </div>
       </div>
@@ -41,10 +35,8 @@ class GestionnaireModal {
   configurerEvenements() {
     const overlay = document.getElementById('modal-overlay');
     const btnFermer = document.getElementById('modal-fermer');
-    const btnContinuer = document.getElementById('modal-continuer');
 
     btnFermer.addEventListener('click', () => this.fermerModal());
-    btnContinuer.addEventListener('click', () => this.fermerModal());
 
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) this.fermerModal();
@@ -95,7 +87,6 @@ class GestionnaireModal {
 
     this.ouvrirModal();
 
-    // Add a global event listener for the Escape key
     const escapeHandler = (e) => {
       if (e.key === 'Escape') {
         this.fermerModal();
@@ -111,7 +102,6 @@ class GestionnaireModal {
     const image = document.getElementById('modal-image');
     const description = document.getElementById('modal-description');
     const video = document.getElementById('modal-video');
-    const btnContinuer = document.getElementById('modal-continuer');
 
     titre.textContent = '🎉 Mission accomplie !';
 
@@ -143,54 +133,11 @@ class GestionnaireModal {
         <div class="text-center text-gray-400">
           <div class="text-4xl mb-4">🌟</div>
           <p>Merci d'avoir exploré Lyon !</p>
-          <button id="btn-leaderboard" class="btn-neon mt-4 px-6 py-2">
-            Voir le classement
-          </button>
         </div>
       </div>
     `;
 
-    btnContinuer.textContent = 'Recommencer';
-    btnContinuer.onclick = () => {
-      this.fermerModal();
-      window.location.reload();
-    };
-
-    const btnLeaderboard = video.querySelector('#btn-leaderboard');
-    if (btnLeaderboard) {
-      btnLeaderboard.addEventListener('click', () => {
-        this.afficherLeaderboard();
-      });
-    }
-
     this.ouvrirModal();
-  }
-
-  async afficherLeaderboard() {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE}/leaderboard?limit=10`);
-      const leaderboard = await response.json();
-
-      const video = document.getElementById('modal-video');
-      video.innerHTML = `
-        <div class="w-full h-full bg-sombre-800 rounded-lg p-4 overflow-y-auto">
-          <h3 class="text-xl font-bold text-neon-cyan mb-4 text-center">🏆 Top 10</h3>
-          <div class="space-y-2">
-            ${leaderboard.map((entry, index) => `
-              <div class="flex items-center justify-between p-2 rounded ${index < 3 ? 'bg-neon-rose bg-opacity-20' : 'bg-sombre-700'}">
-                <div class="flex items-center space-x-3">
-                  <span class="text-lg">${index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`}</span>
-                  <span>${entry.pseudo || 'Anonyme'}</span>
-                </div>
-                <span class="text-neon-cyan font-mono">${this.formaterTemps(entry.bestMs)}</span>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `;
-    } catch (error) {
-      console.error('Erreur chargement leaderboard:', error);
-    }
   }
 
   formaterTemps(ms) {
@@ -213,7 +160,6 @@ class GestionnaireModal {
     overlay.setAttribute('aria-hidden', 'false');
     content.focus();
 
-    // Ensure the close button is visible and clickable
     btnFermer.style.position = 'relative';
     btnFermer.style.zIndex = '50';
     btnFermer.style.pointerEvents = 'auto';
@@ -236,7 +182,6 @@ class GestionnaireModal {
 
     overlay.setAttribute('aria-hidden', 'true');
 
-    // Forcer la fermeture du modal en le cachant complètement
     setTimeout(() => {
       if (overlay) {
         overlay.style.display = 'none';
@@ -246,7 +191,6 @@ class GestionnaireModal {
       }
     }, 300);
 
-    // Reset any YouTube iframes to prevent continued playback
     const youtubeIframe = document.getElementById('youtube-iframe');
     if (youtubeIframe) {
       youtubeIframe.src = 'about:blank';

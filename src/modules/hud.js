@@ -89,7 +89,6 @@ class GestionnaireHUD {
       })
       .join("");
 
-    // Ajouter des écouteurs d'événements pour les boutons de téléportation
     const boutonsPoi = listePoi.querySelectorAll("button");
     boutonsPoi.forEach((bouton) => {
       bouton.addEventListener("click", () => {
@@ -131,7 +130,6 @@ class GestionnaireHUD {
             etiquettes
           );
 
-          // Afficher les informations du POI lorsqu'on clique sur un lieu
           const poiInfo = this.poiActuels.find((p) => p.id === poiId);
           if (poiInfo && window.gestionnaireModal) {
             window.gestionnaireModal.afficherModalPoi(poiInfo);
@@ -142,16 +140,13 @@ class GestionnaireHUD {
   }
 
   marquerPoiVisite(poi) {
-    // Mettre à jour le POI comme visité
     const poiIndex = this.poiActuels.findIndex((p) => p.id === poi.id);
     if (poiIndex !== -1) {
       this.poiActuels[poiIndex].visite = true;
     }
 
-    // Mettre à jour l'affichage
     this.mettreAJourListePoi();
 
-    // Animer le bouton du POI visité
     const boutons = document.querySelectorAll("#liste-poi button");
     if (boutons[poiIndex]) {
       gsap.fromTo(
