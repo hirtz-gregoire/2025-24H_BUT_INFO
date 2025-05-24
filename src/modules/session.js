@@ -18,7 +18,6 @@ class GestionnaireSession {
 
     const tempsEcoule = Date.now() - this.tempsDebut;
     
-    // Enregistrer le checkpoint localement
     const checkpoint = {
       poiId,
       atMs: tempsEcoule,

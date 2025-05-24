@@ -1,99 +1,85 @@
 # Production Deployment
 
-This document provides instructions for deploying the application in a production environment using Docker Compose.
+Ce document fournit les instructions pour déployer l'application en environnement de production en utilisant Docker Compose.
 
-## Prerequisites
+## Prérequis
 
-- Docker and Docker Compose installed on your server
-- Git to clone the repository
+- Docker et Docker Compose installés sur votre serveur
+- Git pour cloner le dépôt
 
-## Deployment Steps
+## Étapes de déploiement
 
-1. Clone the repository:
+1. Cloner le dépôt:
    ```bash
-   git clone <your-repository-url>
-   cd <repository-directory>
+   git clone <url-du-dépôt>
+   cd <répertoire-du-dépôt>
    ```
 
-2. Make sure you have the production configuration files:
+2. Assurez-vous d'avoir les fichiers de configuration de production:
    - `docker-compose.prod.yml`
    - `Dockerfile.prod`
    - `nginx.prod.conf`
    - `.env.production`
 
-3. Build and start the production containers:
+3. Construire et démarrer les conteneurs de production:
    ```bash
    docker-compose -f docker-compose.prod.yml up -d --build
    ```
 
-4. Verify the application is running:
+4. Vérifier que l'application fonctionne:
    ```bash
    curl http://localhost:5000
    ```
 
 ## Configuration
 
-The application is configured to run on HTTP port 5000. If you need to change this port, modify the `docker-compose.prod.yml` file:
+L'application est configurée pour fonctionner sur le port HTTP 5000. Si vous devez changer ce port, modifiez le fichier `docker-compose.prod.yml`:
 
 ```yaml
 frontend:
   ports:
-    - "YOUR_PORT:80"
+    - "VOTRE_PORT:80"
 ```
 
-## Environment Variables
+## Variables d'environnement
 
-Production environment variables are stored in `.env.production`. You can modify this file to change:
+Les variables d'environnement de production sont stockées dans `.env.production`. Vous pouvez modifier ce fichier pour changer:
 
-- API configuration
-- Database settings
-- Google Maps API key
-
-## Database
-
-The application uses SQLite with Prisma. The database file is stored in a Docker volume named `data` for persistence.
+- La clé API Google Maps
 
 ## Logs
 
-To view logs from the running containers:
+Pour voir les logs des conteneurs en cours d'exécution:
 
 ```bash
-# All logs
+# Tous les logs
 docker-compose -f docker-compose.prod.yml logs
 
-# Frontend logs only
+# Logs frontend uniquement
 docker-compose -f docker-compose.prod.yml logs frontend
 
-# API logs only
-docker-compose -f docker-compose.prod.yml logs api
-
-# Follow logs in real-time
+# Suivre les logs en temps réel
 docker-compose -f docker-compose.prod.yml logs -f
 ```
 
-## Stopping the Application
+## Arrêter l'application
 
-To stop the application:
+Pour arrêter l'application:
 
 ```bash
 docker-compose -f docker-compose.prod.yml down
 ```
 
-To stop the application and remove volumes (this will delete the database):
+## Mettre à jour l'application
 
-```bash
-docker-compose -f docker-compose.prod.yml down -v
-```
+Pour mettre à jour l'application avec du nouveau code:
 
-## Updating the Application
-
-To update the application with new code:
-
-1. Pull the latest changes:
+1. Récupérer les derniers changements:
    ```bash
    git pull
    ```
 
-2. Rebuild and restart the containers:
+2. Reconstruire et redémarrer les conteneurs:
    ```bash
    docker-compose -f docker-compose.prod.yml up -d --build
+   ```

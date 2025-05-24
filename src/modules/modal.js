@@ -87,7 +87,6 @@ class GestionnaireModal {
 
     this.ouvrirModal();
 
-    // Add a global event listener for the Escape key
     const escapeHandler = (e) => {
       if (e.key === 'Escape') {
         this.fermerModal();
@@ -161,7 +160,6 @@ class GestionnaireModal {
     overlay.setAttribute('aria-hidden', 'false');
     content.focus();
 
-    // Ensure the close button is visible and clickable
     btnFermer.style.position = 'relative';
     btnFermer.style.zIndex = '50';
     btnFermer.style.pointerEvents = 'auto';
@@ -184,7 +182,6 @@ class GestionnaireModal {
 
     overlay.setAttribute('aria-hidden', 'true');
 
-    // Forcer la fermeture du modal en le cachant complètement
     setTimeout(() => {
       if (overlay) {
         overlay.style.display = 'none';
@@ -194,7 +191,6 @@ class GestionnaireModal {
       }
     }, 300);
 
-    // Reset any YouTube iframes to prevent continued playback
     const youtubeIframe = document.getElementById('youtube-iframe');
     if (youtubeIframe) {
       youtubeIframe.src = 'about:blank';

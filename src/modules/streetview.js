@@ -38,14 +38,11 @@ class GestionnaireStreetView {
 
   async chargerGoogleMaps() {
     try {
-      // Vérifier si l'API Google Maps est déjà chargée
       if (window.google && window.google.maps) {
-        // Charger dynamiquement les bibliothèques nécessaires
         await this.chargerBibliotheques();
         return;
       }
 
-      // Charger le script de l'API Google Maps de manière asynchrone
       await new Promise((resolve, reject) => {
         const script = document.createElement('script');
         script.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_MAPS_KEY}`;
@@ -72,11 +69,9 @@ class GestionnaireStreetView {
 
   async chargerBibliotheques() {
     try {
-      // Charger les bibliothèques nécessaires de manière dynamique
       const { StreetViewPanorama, StreetViewService } = await google.maps.importLibrary("streetView");
       const { Geometry } = await google.maps.importLibrary("geometry");
       
-      // Stocker les références pour une utilisation ultérieure
       this.StreetViewPanorama = StreetViewPanorama;
       this.StreetViewService = StreetViewService;
       this.Geometry = Geometry;
@@ -89,7 +84,6 @@ class GestionnaireStreetView {
   creerPanorama() {
     const container = document.getElementById('streetview-container');
     
-    // Créer un élément de filtre pour les transitions fluides
     if (!document.getElementById('streetview-filter')) {
       const filter = document.createElement('div');
       filter.id = 'streetview-filter';
@@ -101,7 +95,6 @@ class GestionnaireStreetView {
       container.parentNode.appendChild(filter);
     }
     
-    // Style pour le mode nuit
     const styleNuit = [
       { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
       { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
@@ -116,7 +109,6 @@ class GestionnaireStreetView {
       { featureType: "water", elementType: "labels.text.stroke", stylers: [{ color: "#17263c" }] }
     ];
     
-    // Utiliser la classe StreetViewPanorama chargée dynamiquement
     this.panorama = new this.StreetViewPanorama(container, {
       position: { lat: 45.7577, lng: 4.8320 },
       pov: { heading: 90, pitch: 5 },
@@ -133,12 +125,11 @@ class GestionnaireStreetView {
       disableDefaultUI: true,
       scrollwheel: false,
       zoomControl: false,
-      date: new Date('2024-01-01'), // Date plus récente
-      styles: styleNuit, // Appliquer le style nuit
+      date: new Date('2024-01-01'),
+      styles: styleNuit,
       visible: true
     });
 
-    // Réduire la résolution pendant les transitions pour améliorer la fluidité
     this.panorama.setOptions({ 
       imageDateControl: false
     });
@@ -147,13 +138,11 @@ class GestionnaireStreetView {
       this.verifierProximitePoi();
     });
 
-    // Ajouter des écouteurs pour les transitions
     this.panorama.addListener('pov_changed', () => {
       this.appliquerEffetTransition();
       this.prechargerPanoramasAdjacents();
     });
     
-    // Ajouter un écouteur pour les changements de zoom
     this.panorama.addListener('zoom_changed', () => {
       this.appliquerEffetTransition();
     });
@@ -163,17 +152,14 @@ class GestionnaireStreetView {
     const filter = document.getElementById('streetview-filter');
     if (!filter) return;
     
-    // Annuler toute animation en cours
     gsap.killTweensOf(filter);
     
-    // Appliquer un flou pendant la transition
     gsap.to(filter, {
       backdropFilter: 'blur(8px)',
       backgroundColor: 'rgba(0, 0, 0, 0.2)',
       duration: 0.2,
       ease: 'power1.in',
       onComplete: () => {
-        // Restaurer la qualité après un court délai
         gsap.to(filter, {
           backdropFilter: 'blur(0px)',
           backgroundColor: 'rgba(0, 0, 0, 0)',
@@ -208,7 +194,6 @@ class GestionnaireStreetView {
     const poiNonVisites = this.poiActuels.filter(poi => !poi.visite);
     
     poiNonVisites.forEach(poi => {
-      // Utiliser la classe Geometry chargée dynamiquement
       const distance = google.maps.geometry.spherical.computeDistanceBetween(
         positionActuelle,
         new google.maps.LatLng(poi.lat, poi.lng)
@@ -250,22 +235,18 @@ class GestionnaireStreetView {
   teleporterVers(lat, lng, heading, pitch) {
     if (!this.panorama) return;
     
-    // Appliquer l'effet de transition
     this.appliquerEffetTransition();
     
-    // Téléporter vers la nouvelle position
     this.panorama.setPosition({
       lat: lat,
       lng: lng
     });
     
-    // Définir l'orientation de la vue
     this.panorama.setPov({
       heading: heading,
       pitch: pitch
     });
     
-    // Vérifier si le POI est atteint
     this.verifierProximitePoi();
   }
 
@@ -273,7 +254,6 @@ class GestionnaireStreetView {
     if (!this.panorama || !this.StreetViewService) return;
 
     try {
-      // Créer une instance du service StreetView si elle n'existe pas déjà
       if (!this.streetViewService) {
         this.streetViewService = new this.StreetViewService();
       }
@@ -281,17 +261,14 @@ class GestionnaireStreetView {
       const positionActuelle = this.panorama.getPosition();
       if (!positionActuelle) return;
 
-      // Obtenir le POV actuel
       const povActuel = this.panorama.getPov();
       
-      // Calculer les directions pour précharger (avant, gauche, droite)
       const directions = [
         povActuel.heading,
         (povActuel.heading + 90) % 360,
         (povActuel.heading - 90 + 360) % 360
       ];
 
-      // Précharger les panoramas dans ces directions
       for (const heading of directions) {
         await this.prechargerPanoramaDirection(positionActuelle, heading);
       }
@@ -304,14 +281,12 @@ class GestionnaireStreetView {
     if (!this.streetViewService) return;
 
     try {
-      // Calculer un point à environ 10 mètres dans la direction spécifiée
       const point = google.maps.geometry.spherical.computeOffset(
         position,
-        10, // distance en mètres
+        10,
         heading
       );
 
-      // Rechercher le panorama le plus proche de ce point
       const resultat = await this.appelerAvecBackoff(() => 
         new Promise((resolve, reject) => {
           this.streetViewService.getPanorama({
@@ -328,11 +303,9 @@ class GestionnaireStreetView {
         })
       );
 
-      // Le panorama est maintenant en cache pour une utilisation future
       return resultat;
     } catch (error) {
       if (tentative < 3) {
-        // Backoff exponentiel
         const delai = Math.min(Math.pow(2, tentative) * 1000, delaiMax);
         console.log(`Nouvelle tentative de préchargement dans ${delai}ms...`);
         
@@ -348,7 +321,6 @@ class GestionnaireStreetView {
     try {
       return await fn();
     } catch (error) {
-      // Vérifier si l'erreur est liée à un quota dépassé ou à une limitation de l'API
       const estErreurQuota = error.message && (
         error.message.includes('OVER_QUERY_LIMIT') || 
         error.message.includes('RESOURCE_EXHAUSTED') ||
@@ -356,7 +328,6 @@ class GestionnaireStreetView {
       );
 
       if (estErreurQuota && tentative < 5) {
-        // Backoff exponentiel
         const delai = Math.min(Math.pow(2, tentative) * 1000, delaiMax);
         console.log(`Limite de quota atteinte. Nouvelle tentative dans ${delai}ms...`);
         
