@@ -20,7 +20,7 @@ export const chargeurPoi = {
           {
             heading: 130,
             pitch: 25,
-            text: "This is an example text",
+            text: "La place Bellecour\n\nSituée au cœur de Lyon,\nla Place Bellecour est l’une des plus grandes places piétonnes d’Europe.\nDominée par la statue équestre de Louis XIV.\n\nElle constitue un point de repère emblématique de la ville.\nEntourée de boutiques, de cafés et offrant une vue sur la colline de Fourvière,\nc’est un lieu central pour les rendez-vous,\nles événements et les balades.",
           },
         ],
       },
@@ -37,9 +37,14 @@ export const chargeurPoi = {
           "Place historique avec la fontaine Bartholdi et l'Hôtel de Ville, souvent mise en lumière lors d'événements culturels.",
         etiquettes: [
           {
-            heading: 100,
-            pitch: 40,
-            text: "This is an example text",
+            heading: 0,
+            pitch: 15,
+            text: "La place des Terreaux\n\nSituée en plein cœur de Lyon,\nla Place des Terreaux est une large esplanade entourée de façades classiques.\n\nTrès animée, elle offre un bel équilibre entre culture, patrimoine et vie urbaine.\nOn y trouve la célèbre fontaine de Bartholdi, symbole fort de la place.",
+          },
+          {
+            heading: 60,
+            pitch: 5,
+            text: "Hôtel de Ville de Lyon\n\nL’Hôtel de Ville, qui borde la Place des Terreaux, est un bâtiment majestueux datant du XVIIe siècle.\nSon architecture riche et sa façade sculptée en font l’un des édifices les plus impressionnants de la ville.\n\nIl abrite encore aujourd’hui la mairie centrale de Lyon.",
           },
         ],
       },
@@ -56,10 +61,15 @@ export const chargeurPoi = {
           "Perchée sur la colline, la basilique offre un panorama exceptionnel sur Lyon, particulièrement spectaculaire la nuit.",
         etiquettes: [
           {
-            heading: 100,
-            pitch: 40,
-            text: "This is an example text",
+            heading: 280,
+            pitch: 20,
+            text: "Fourvière\n\nPerchée au- dessus de la ville,\nla colline de Fourvière offre un panorama exceptionnel sur tout Lyon.\n\nSurnommée la “colline qui prie”,\nelle est un lieu de promenade, de recueillement et de patrimoine,\nmêlant nature, histoire et spiritualité.",
           },
+          {
+            heading: 30,
+            pitch: 20,
+            text: "Basilique Notre-Dame de Fourvière\n\nConstruite à la fin du XIXe siècle,\nla basilique Notre-Dame de Fourvière domine Lyon de son allure unique.\n\nSon style mêle inspiration romane et byzantine,\net son intérieur richement décoré attire chaque année des milliers de visiteurs.",
+          }
         ],
       },
       {
@@ -76,9 +86,14 @@ export const chargeurPoi = {
         etiquettes: [
           {
             heading: 100,
-            pitch: 40,
-            text: "This is an example text",
+            pitch: 10,
+            text: "Rue de la République\n\nLa rue de la République est l’une des principales artères commerçantes de Lyon.\n\nElle relie la place Bellecour à la place de la Comédie, et est entièrement piétonne,\nidéale pour le shopping ou une balade en centre-ville.",
           },
+          {
+            heading: 200,
+            pitch: 10,
+            text: "Une rue vivante et centrale.\n\nTrès fréquentée, la 'Rue de la Ré' incarne l’énergie du centre- ville lyonnais.\n\nBordée de boutiques, de cinémas et de cafés,\nelle attire autant les locaux que les visiteurs,\ndans un décor haussmannien élégant.",
+          }
         ],
       },
       {
@@ -94,10 +109,15 @@ export const chargeurPoi = {
           "Une place centrale animée avec une fontaine emblématique, entourée de cafés et de boutiques.",
         etiquettes: [
           {
-            heading: 100,
-            pitch: 40,
-            text: "This is an example text",
+            heading: 25,
+            pitch: 20,
+            text: "Place des Jacobins\n\nNichée au cœur du quartier Presqu'île, la Place des Jacobins est l'une des plus élégantes de Lyon.\n\nSon charme tient à son architecture harmonieuse et à sa magnifique fontaine blanche au centre.",
           },
+          {
+            heading: 25,
+            pitch: 10,
+            text: "Un écrin de calme et de beauté\n\nEntourée de bâtiments haussmanniens et de terrasses accueillantes,\nla place offre un cadre paisible pour faire une pause ou simplement admirer le décor.\n\nUn vrai bijou au cœur de la ville.",
+          }
         ],
       },
     ];
