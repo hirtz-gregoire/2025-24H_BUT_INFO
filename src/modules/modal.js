@@ -19,19 +19,13 @@ class GestionnaireModal {
         <div id="modal-content" class="glassmorphism rounded-xl max-w-2xl w-full mx-4 p-6 transform scale-95 transition-transform duration-300 z-[10000]">
           <div class="flex justify-between items-start mb-4">
             <h2 id="modal-titre" class="text-2xl font-bold text-neon-rose glow-text"></h2>
-            <button id="modal-fermer" class="text-gray-400 hover:text-white text-2xl z-50 relative" aria-label="Fermer">×</button>
+            <button id="modal-fermer" class="text-gray-400 hover:text-white text-4xl z-50 relative" aria-label="Fermer">×</button>
           </div>
 
           <div id="modal-body" class="space-y-4">
             <div id="modal-image" class="w-full h-48 bg-sombre-800 rounded-lg overflow-hidden"></div>
             <p id="modal-description" class="text-gray-300 leading-relaxed"></p>
             <div id="modal-video" class="w-full h-64 bg-sombre-800 rounded-lg overflow-hidden"></div>
-          </div>
-
-          <div class="mt-6 flex justify-center">
-            <button id="modal-continuer" class="btn-neon px-8 py-3">
-              Continuer l'exploration
-            </button>
           </div>
         </div>
       </div>
@@ -41,10 +35,8 @@ class GestionnaireModal {
   configurerEvenements() {
     const overlay = document.getElementById('modal-overlay');
     const btnFermer = document.getElementById('modal-fermer');
-    const btnContinuer = document.getElementById('modal-continuer');
 
     btnFermer.addEventListener('click', () => this.fermerModal());
-    btnContinuer.addEventListener('click', () => this.fermerModal());
 
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) this.fermerModal();
@@ -111,7 +103,6 @@ class GestionnaireModal {
     const image = document.getElementById('modal-image');
     const description = document.getElementById('modal-description');
     const video = document.getElementById('modal-video');
-    const btnContinuer = document.getElementById('modal-continuer');
 
     titre.textContent = '🎉 Mission accomplie !';
 
@@ -146,12 +137,6 @@ class GestionnaireModal {
         </div>
       </div>
     `;
-
-    btnContinuer.textContent = 'Recommencer';
-    btnContinuer.onclick = () => {
-      this.fermerModal();
-      window.location.reload();
-    };
 
     this.ouvrirModal();
   }
