@@ -64,3 +64,45 @@
 .gm-bundled-control {
   display: none !important;
 }
+
+#map-container {
+  box-shadow: 0 0 20px rgba(247, 37, 133, 0.4);
+  transition: all 0.3s ease;
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  width: 250px !important;
+  height: 250px !important;
+  z-index: 1000 !important;
+}
+
+#map-container:hover {
+  box-shadow: 0 0 30px rgba(247, 37, 133, 0.7);
+  transform: scale(1.02);
+}
+
+/* Ensure map controls are visible and styled properly */
+.gm-style-mtc, .gm-svpc {
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Custom marker pulse animation */
+@keyframes map-marker-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.map-marker-pulse {
+  animation: map-marker-pulse 2s infinite ease-in-out;
+}

@@ -29,15 +29,139 @@ class GestionnaireHUD {
       </div>
     `;
   }
+  
+  creerCarteContainer() {
+    const ancienContainer = document.getElementById('map-container');
+    if (ancienContainer) {
+      ancienContainer.remove();
+    }
+    
+    const mapContainer = document.createElement('div');
+    mapContainer.id = 'map-container';
+    mapContainer.className = 'rounded-lg overflow-hidden glassmorphism border border-neon-rose';
+    document.body.appendChild(mapContainer);
+    
+    return mapContainer;
+  }
 
   configurerEvenements() {
     window.addEventListener("streetview-pret", (event) => {
       this.initialiserMission(event.detail);
+      this.initialiserCarte();
     });
 
     window.addEventListener("poi-atteint", (event) => {
       this.marquerPoiVisite(event.detail);
     });
+    
+    window.addEventListener("position-changed", (event) => {
+      if (this.map && event.detail) {
+        this.mettreAJourPositionCarte(event.detail.lat, event.detail.lng);
+      }
+    });
+  }
+  
+  async initialiserCarte() {
+    try {
+      this.creerCarteContainer();
+      
+      if (!window.google || !window.google.maps) {
+        await new Promise(resolve => {
+          const checkGoogleMaps = setInterval(() => {
+            if (window.google && window.google.maps) {
+              clearInterval(checkGoogleMaps);
+              resolve();
+            }
+          }, 100);
+        });
+      }
+      
+      const mapOptions = {
+        center: { lat: 45.7579, lng: 4.8320 },
+        zoom: 15,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        disableDefaultUI: true,
+        zoomControl: true,
+        zoomControlOptions: {
+          position: google.maps.ControlPosition.RIGHT_BOTTOM
+        },
+        styles: [
+          { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
+          { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
+          { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
+          { featureType: "road", elementType: "geometry", stylers: [{ color: "#38414e" }] },
+          { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#212a37" }] },
+          { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#9ca5b3" }] },
+          { featureType: "poi", elementType: "geometry", stylers: [{ color: "#283d6a" }] },
+          { featureType: "poi", elementType: "labels.text.fill", stylers: [{ color: "#d59563" }] },
+          { featureType: "water", elementType: "geometry", stylers: [{ color: "#17263c" }] },
+          { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#515c6d" }] },
+          { featureType: "water", elementType: "labels.text.stroke", stylers: [{ color: "#17263c" }] }
+        ]
+      };
+      
+      this.map = new google.maps.Map(document.getElementById("map-container"), mapOptions);
+      
+      this.positionMarker = new google.maps.Marker({
+        position: { lat: 45.7579, lng: 4.8320 },
+        map: this.map,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 10,
+          fillColor: "#f72585",
+          fillOpacity: 1,
+          strokeColor: "#ffffff",
+          strokeWeight: 2
+        },
+        title: "Votre position"
+      });
+      
+      this.poiActuels.forEach(poi => {
+        new google.maps.Marker({
+          position: { lat: poi.lat, lng: poi.lng },
+          map: this.map,
+          title: poi.nom,
+          icon: {
+            url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${poi.visite ? '#4ade80' : '#ffffff'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+            `),
+            scaledSize: new google.maps.Size(24, 24)
+          }
+        });
+      });
+      
+      if (this.poiActuels.length > 0) {
+        const premierPoi = this.poiActuels[0];
+        this.mettreAJourPositionCarte(premierPoi.lat, premierPoi.lng);
+      }
+      
+      if (window.gestionnaireStreetView && window.gestionnaireStreetView.panorama) {
+        window.gestionnaireStreetView.panorama.addListener("position_changed", () => {
+          const position = window.gestionnaireStreetView.panorama.getPosition();
+          if (position) {
+            window.dispatchEvent(new CustomEvent("position-changed", {
+              detail: {
+                lat: position.lat(),
+                lng: position.lng()
+              }
+            }));
+          }
+        });
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'initialisation de la carte:", error);
+    }
+  }
+  
+  mettreAJourPositionCarte(lat, lng) {
+    if (!this.map || !this.positionMarker) return;
+    
+    const position = new google.maps.LatLng(lat, lng);
+    this.positionMarker.setPosition(position);
+    this.map.panTo(position);
   }
 
   initialiserMission(data) {

@@ -73,6 +73,11 @@ class AppLumiere {
     if (this.sessionId) {
       await gestionnaireSession.terminerSession(this.sessionId);
     }
+    
+    const mapContainer = document.getElementById('map-container');
+    if (mapContainer) {
+      mapContainer.remove();
+    }
   }
 }
 

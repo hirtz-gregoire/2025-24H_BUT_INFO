@@ -40,6 +40,11 @@ export function initAccueil() {
   
   const btnCommencer = container.querySelector('#btn-commencer');
   btnCommencer.addEventListener('click', () => {
+    const mapContainer = document.getElementById('map-container');
+    if (mapContainer) {
+      mapContainer.remove();
+    }
+    
     gsap.to(container, {
       opacity: 0,
       duration: 1,

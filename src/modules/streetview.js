@@ -162,6 +162,17 @@ class GestionnaireStreetView {
 
     this.panorama.addListener("position_changed", () => {
       this.verifierProximitePoi();
+      
+      // Dispatch position change event for map update
+      const position = this.panorama.getPosition();
+      if (position) {
+        window.dispatchEvent(new CustomEvent("position-changed", {
+          detail: {
+            lat: position.lat(),
+            lng: position.lng()
+          }
+        }));
+      }
     });
 
     this.panorama.addListener("pov_changed", () => {
