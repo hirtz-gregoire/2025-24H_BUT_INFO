@@ -17,6 +17,8 @@ CMD ["node", "server.js"]
 
 FROM nginx:alpine AS production
 COPY --from=build /app/dist /usr/share/nginx/html
+COPY public/img /usr/share/nginx/html/img
+COPY poi.json /usr/share/nginx/html/poi.json
 COPY nginx.prod.conf /etc/nginx/nginx.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
