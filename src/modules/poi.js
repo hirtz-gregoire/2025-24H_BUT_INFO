@@ -1,10 +1,9 @@
 export const chargeurPoi = {
   async chargerPoi() {
-      return this.obtenirPoiParDefaut();
-    }
+    return this.obtenirPoiParDefault();
   },
 
-  obtenirPoiParDefaut() {
+  obtenirPoiParDefault() {
     return [
       {
         id: "bellecour",
