@@ -1,20 +1,6 @@
 export const chargeurPoi = {
   async chargerPoi() {
-    try {
-      // In production, try to load from poi.json
-      if (import.meta.env.PROD) {
-        const response = await fetch("/poi.json");
-        if (response.ok) {
-          const data = await response.json();
-          return data;
-        }
-      }
-      // Fall back to default data if not in production or if fetch fails
-      return this.obtenirPoiParDefault();
-    } catch (error) {
-      console.error("Error loading POI data:", error);
-      return this.obtenirPoiParDefault();
-    }
+    return this.obtenirPoiParDefault();
   },
 
   obtenirPoiParDefault() {
@@ -24,16 +10,16 @@ export const chargeurPoi = {
         nom: "Place Bellecour",
         lat: 45.7579101,
         lng: 4.8321149,
-        heading: 90,
+        heading: 120,
         pitch: 5,
-        youtubeId: "dQw4w9WgXcQ",
+        youtubeId: "tQpghHw7L_g",
         imgPath: "/img/bellecour.jpg",
         description:
           "La plus grande place piétonne d'Europe, offrant une vue dégagée sur la colline de Fourvière et ses illuminations.",
         etiquettes: [
           {
-            heading: 100,
-            pitch: 40,
+            heading: 130,
+            pitch: 25,
             text: "This is an example text",
           },
         ],
@@ -64,7 +50,7 @@ export const chargeurPoi = {
         lng: 4.8230147,
         heading: 300,
         pitch: 5,
-        youtubeId: "dQw4w9WgXcQ",
+        youtubeId: "V3TA1RGOEKA",
         imgPath: "/img/fourviere.jpg",
         description:
           "Perchée sur la colline, la basilique offre un panorama exceptionnel sur Lyon, particulièrement spectaculaire la nuit.",
@@ -77,16 +63,16 @@ export const chargeurPoi = {
         ],
       },
       {
-        id: "institut",
-        nom: "Institut Lumière",
-        lat: 45.745169,
-        lng: 4.869602,
+        id: "republique",
+        nom: "Rue de la République",
+        lat: 45.7630008,
+        lng: 4.8357851,
         heading: 120,
         pitch: 5,
         youtubeId: "dQw4w9WgXcQ",
-        imgPath: "/img/institut.jpg",
+        imgPath: "/img/republique.jpg",
         description:
-          "Berceau du cinéma, l'Institut Lumière célèbre l'art de la lumière et du mouvement dans un cadre historique.",
+          "Une rue commerçante emblématique de Lyon, bordée de boutiques et de bâtiments historiques.",
         etiquettes: [
           {
             heading: 100,
@@ -96,16 +82,16 @@ export const chargeurPoi = {
         ],
       },
       {
-        id: "quais",
-        nom: "Berges du Rhône",
-        lat: 45.7575,
-        lng: 4.837,
-        heading: 270,
+        id: "jacobins",
+        nom: "Place des Jacobins",
+        lat: 45.7602592,
+        lng: 4.8335169,
+        heading: 0,
         pitch: 0,
-        youtubeId: "dQw4w9WgXcQ",
-        imgPath: "/img/quais.jpg",
+        youtubeId: "XpGWHP0-zjE",
+        imgPath: "/img/jacobins.jpg",
         description:
-          "Les quais du Rhône transformés en promenade lumineuse le long du fleuve, offrant une ambiance paisible en soirée.",
+          "Une place centrale animée avec une fontaine emblématique, entourée de cafés et de boutiques.",
         etiquettes: [
           {
             heading: 100,

@@ -284,7 +284,67 @@ class GestionnaireStreetView {
   }
 
   loadEtiquettes(etiquettes) {
-    console.log(etiquettes[0].text);
+    const existing = document.querySelectorAll(".etiquette-label");
+    existing.forEach((el) => el.remove());
+
+    this.currentEtiquettes = etiquettes;
+
+    if (!this.povUpdateListener) {
+      this.povUpdateListener = this.panorama.addListener("pov_changed", () => {
+        this.updateEtiquettePositions();
+      });
+    }
+
+    // Initial render
+    this.updateEtiquettePositions();
+  }
+
+  updateEtiquettePositions() {
+    const container = document.getElementById("streetview-container");
+    const rect = container.getBoundingClientRect();
+    const pov = this.panorama.getPov();
+    const zoom = this.panorama.getZoom();
+
+    const hfov = getHorizontalFov(zoom);
+    const aspectRatio = rect.width / rect.height;
+    const vfov = getVerticalFov(hfov, aspectRatio);
+
+    this.currentEtiquettes.forEach((etiquette, index) => {
+      let el = document.querySelector(`#etiquette-${index}`);
+      if (!el) {
+        el = document.createElement("div");
+        el.id = `etiquette-${index}`;
+        el.className = "etiquette-label";
+        el.innerText = etiquette.text;
+        el.style.position = "absolute";
+        el.style.background = "rgba(0,0,0,0.6)";
+        el.style.color = "white";
+        el.style.padding = "4px 8px";
+        el.style.borderRadius = "4px";
+        el.style.pointerEvents = "none";
+        el.style.transition = "opacity 0.2s";
+        el.style.whiteSpace = "nowrap";
+        el.style.zIndex = "10";
+        container.appendChild(el);
+      }
+
+      // Normalize heading
+      const deltaHeading = (etiquette.heading - pov.heading + 360) % 360;
+      const relHeading = deltaHeading > 180 ? deltaHeading - 360 : deltaHeading;
+
+      const deltaPitch = etiquette.pitch - pov.pitch;
+
+      const x = (0.5 + relHeading / hfov) * rect.width;
+      const y = (0.5 - deltaPitch / vfov) * rect.height;
+
+      if (x < 0 || x > rect.width || y < 0 || y > rect.height) {
+        el.style.opacity = "0";
+      } else {
+        el.style.opacity = "1";
+        el.style.left = `${x}px`;
+        el.style.top = `${y}px`;
+      }
+    });
   }
 
   async prechargerPanoramasAdjacents() {
@@ -379,4 +439,22 @@ class GestionnaireStreetView {
 
 export function initStreetView() {
   window.gestionnaireStreetView = new GestionnaireStreetView();
+}
+
+function getHorizontalFov(zoom) {
+  // Approximate horizontal FOV values for Street View zoom levels
+  const fovs = {
+    0: 126,
+    1: 90,
+    2: 63,
+    3: 40,
+    4: 27,
+    5: 17,
+    6: 11,
+  };
+  return fovs[zoom] ?? 90; // fallback
+}
+
+function getVerticalFov(horizontalFov, aspectRatio) {
+  return horizontalFov / aspectRatio;
 }
