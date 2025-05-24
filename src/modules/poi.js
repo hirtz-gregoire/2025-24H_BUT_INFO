@@ -16,6 +16,13 @@ export const chargeurPoi = {
         imgPath: "/img/bellecour.jpg",
         description:
           "La plus grande place piétonne d'Europe, offrant une vue dégagée sur la colline de Fourvière et ses illuminations.",
+        etiquette: [
+          {
+            heading: 100,
+            pitch: 40,
+            text: "This is an example text",
+          },
+        ],
       },
       {
         id: "terreaux",
