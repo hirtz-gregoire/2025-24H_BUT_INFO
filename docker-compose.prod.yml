@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - "5000:80"
+      
+    volumes:
+      - ./nginx.prod.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: api
+    env_file: .env.production
+    volumes:
+      - data:/data
+    restart: unless-stopped
+    command: sh -c "npx prisma migrate deploy && node server.js"
+
+volumes:
+  data:
