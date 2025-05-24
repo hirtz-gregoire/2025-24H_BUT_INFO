@@ -29,10 +29,6 @@ export function initAccueil() {
             <span class="w-3 h-3 bg-neon-violet rounded-full animate-pulse" style="animation-delay: 0.5s;"></span>
             <span>5 lieux emblématiques à découvrir</span>
           </div>
-          <div class="flex items-center justify-center space-x-3 text-lg">
-            <span class="w-3 h-3 bg-neon-bleu rounded-full animate-pulse" style="animation-delay: 1s;"></span>
-            <span>Classement en temps réel</span>
-          </div>
         </div>
         
         <button id="btn-commencer" class="btn-neon text-xl px-12 py-4 animate-pulse-glow">

@@ -11,26 +11,6 @@ services:
     env_file: .env
     environment:
       - NODE_ENV=development
-    depends_on:
-      - api
-
-  api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: api
-    volumes:
-      - "./api:/api"
-      - "api_node_modules:/api/node_modules"
-      - "data:/data"
-    ports:
-      - "4000:4000"
-    environment:
-      - NODE_ENV=development
-      - DATABASE_URL=file:/data/data.db
-    command: sh -c "npm install && npx prisma migrate dev --name init && npm run dev"
     
 volumes:
   node_modules:
-  api_node_modules:
-  data:

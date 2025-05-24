@@ -143,9 +143,6 @@ class GestionnaireModal {
         <div class="text-center text-gray-400">
           <div class="text-4xl mb-4">🌟</div>
           <p>Merci d'avoir exploré Lyon !</p>
-          <button id="btn-leaderboard" class="btn-neon mt-4 px-6 py-2">
-            Voir le classement
-          </button>
         </div>
       </div>
     `;
@@ -156,41 +153,7 @@ class GestionnaireModal {
       window.location.reload();
     };
 
-    const btnLeaderboard = video.querySelector('#btn-leaderboard');
-    if (btnLeaderboard) {
-      btnLeaderboard.addEventListener('click', () => {
-        this.afficherLeaderboard();
-      });
-    }
-
     this.ouvrirModal();
-  }
-
-  async afficherLeaderboard() {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE}/leaderboard?limit=10`);
-      const leaderboard = await response.json();
-
-      const video = document.getElementById('modal-video');
-      video.innerHTML = `
-        <div class="w-full h-full bg-sombre-800 rounded-lg p-4 overflow-y-auto">
-          <h3 class="text-xl font-bold text-neon-cyan mb-4 text-center">🏆 Top 10</h3>
-          <div class="space-y-2">
-            ${leaderboard.map((entry, index) => `
-              <div class="flex items-center justify-between p-2 rounded ${index < 3 ? 'bg-neon-rose bg-opacity-20' : 'bg-sombre-700'}">
-                <div class="flex items-center space-x-3">
-                  <span class="text-lg">${index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`}</span>
-                  <span>${entry.pseudo || 'Anonyme'}</span>
-                </div>
-                <span class="text-neon-cyan font-mono">${this.formaterTemps(entry.bestMs)}</span>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `;
-    } catch (error) {
-      console.error('Erreur chargement leaderboard:', error);
-    }
   }
 
   formaterTemps(ms) {
