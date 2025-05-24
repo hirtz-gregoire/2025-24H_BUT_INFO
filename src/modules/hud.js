@@ -1,4 +1,4 @@
-import { gsap } from 'gsap';
+import { gsap } from "gsap";
 
 class GestionnaireHUD {
   constructor() {
@@ -15,8 +15,8 @@ class GestionnaireHUD {
   }
 
   creerHUD() {
-    const container = document.getElementById('hud-container');
-    
+    const container = document.getElementById("hud-container");
+
     container.innerHTML = `
       <div class="p-4 space-y-4">
         <div id="hud-content" class="glassmorphism rounded-lg p-4 space-y-4">
@@ -31,11 +31,11 @@ class GestionnaireHUD {
   }
 
   configurerEvenements() {
-    window.addEventListener('streetview-pret', (event) => {
+    window.addEventListener("streetview-pret", (event) => {
       this.initialiserMission(event.detail);
     });
 
-    window.addEventListener('poi-atteint', (event) => {
+    window.addEventListener("poi-atteint", (event) => {
       this.marquerPoiVisite(event.detail);
     });
   }
@@ -43,49 +43,96 @@ class GestionnaireHUD {
   initialiserMission(data) {
     this.poiActuels = data.poiActuels;
     this.tempsDebut = data.tempsDebut;
-    
+
     this.mettreAJourListePoi();
-    
-    gsap.to('#hud-content', { 
-      opacity: 1, 
-      y: 0, 
-      duration: 0.5, 
-      delay: 0.5 
+
+    gsap.to("#hud-content", {
+      opacity: 1,
+      y: 0,
+      duration: 0.5,
+      delay: 0.5,
     });
   }
 
   mettreAJourListePoi() {
-    const listePoi = document.getElementById('liste-poi');
-    
-    listePoi.innerHTML = this.poiActuels.map(poi => `
+    const listePoi = document.getElementById("liste-poi");
+
+    listePoi.innerHTML = this.poiActuels
+      .map((poi) => {
+        let string = "";
+        poi.etiquettes.forEach((etiquette, index) => {
+          string += `
+
+        data-poi-etiquette${index}-heading="${etiquette.heading}"
+        data-poi-etiquette${index}-pitch="${etiquette.pitch}"
+        data-poi-etiquette${index}-text="${etiquette.text}"
+        `;
+        });
+        return `
       <button 
-        class="w-full flex items-center space-x-3 p-2 rounded ${poi.visite ? 'bg-green-900 bg-opacity-50' : 'bg-sombre-800'} hover:bg-opacity-80 transition-all"
+        class="w-full flex items-center space-x-3 p-2 rounded ${
+          poi.visite ? "bg-green-900 bg-opacity-50" : "bg-sombre-800"
+        } hover:bg-opacity-80 transition-all"
         data-poi-id="${poi.id}"
         data-poi-lat="${poi.lat}"
         data-poi-lng="${poi.lng}"
         data-poi-heading="${poi.heading}"
         data-poi-pitch="${poi.pitch}"
+        ${string}
       >
-        <span class="text-lg">${poi.visite ? '✅' : '📍'}</span>
-        <span class="${poi.visite ? 'line-through text-gray-400' : 'text-white'}">${poi.nom}</span>
+        <span class="text-lg">${poi.visite ? "✅" : "📍"}</span>
+        <span class="${poi.visite ? "line-through text-gray-400" : "text-white"}">${
+          poi.nom
+        }</span>
       </button>
-    `).join('');
-    
+    `;
+      })
+      .join("");
+
     // Ajouter des écouteurs d'événements pour les boutons de téléportation
-    const boutonsPoi = listePoi.querySelectorAll('button');
-    boutonsPoi.forEach(bouton => {
-      bouton.addEventListener('click', () => {
+    const boutonsPoi = listePoi.querySelectorAll("button");
+    boutonsPoi.forEach((bouton) => {
+      bouton.addEventListener("click", () => {
         const poiId = bouton.dataset.poiId;
         const lat = parseFloat(bouton.dataset.poiLat);
         const lng = parseFloat(bouton.dataset.poiLng);
         const heading = parseFloat(bouton.dataset.poiHeading);
         const pitch = parseFloat(bouton.dataset.poiPitch);
-        
+
+        const etiquettes = [];
+        let index = 0;
+        while (true) {
+          const headingKey = `poiEtiquette${index}Heading`;
+          const pitchKey = `poiEtiquette${index}Pitch`;
+          const textKey = `poiEtiquette${index}Text`;
+
+          if (
+            bouton.dataset[headingKey] !== undefined &&
+            bouton.dataset[pitchKey] !== undefined &&
+            bouton.dataset[textKey] !== undefined
+          ) {
+            etiquettes.push({
+              heading: parseFloat(bouton.dataset[headingKey]),
+              pitch: parseFloat(bouton.dataset[pitchKey]),
+              text: bouton.dataset[textKey],
+            });
+            index++;
+          } else {
+            break;
+          }
+        }
+
         if (window.gestionnaireStreetView) {
-          window.gestionnaireStreetView.teleporterVers(lat, lng, heading, pitch);
-          
+          window.gestionnaireStreetView.teleporterVers(
+            lat,
+            lng,
+            heading,
+            pitch,
+            etiquettes
+          );
+
           // Afficher les informations du POI lorsqu'on clique sur un lieu
-          const poiInfo = this.poiActuels.find(p => p.id === poiId);
+          const poiInfo = this.poiActuels.find((p) => p.id === poiId);
           if (poiInfo && window.gestionnaireModal) {
             window.gestionnaireModal.afficherModalPoi(poiInfo);
           }
@@ -96,20 +143,27 @@ class GestionnaireHUD {
 
   marquerPoiVisite(poi) {
     // Mettre à jour le POI comme visité
-    const poiIndex = this.poiActuels.findIndex(p => p.id === poi.id);
+    const poiIndex = this.poiActuels.findIndex((p) => p.id === poi.id);
     if (poiIndex !== -1) {
       this.poiActuels[poiIndex].visite = true;
     }
-    
+
     // Mettre à jour l'affichage
     this.mettreAJourListePoi();
-    
+
     // Animer le bouton du POI visité
-    const boutons = document.querySelectorAll('#liste-poi button');
+    const boutons = document.querySelectorAll("#liste-poi button");
     if (boutons[poiIndex]) {
-      gsap.fromTo(boutons[poiIndex],
-        { scale: 1, backgroundColor: 'rgba(34, 197, 94, 0.2)' },
-        { scale: 1.05, backgroundColor: 'rgba(34, 197, 94, 0.5)', duration: 0.3, yoyo: true, repeat: 1 }
+      gsap.fromTo(
+        boutons[poiIndex],
+        { scale: 1, backgroundColor: "rgba(34, 197, 94, 0.2)" },
+        {
+          scale: 1.05,
+          backgroundColor: "rgba(34, 197, 94, 0.5)",
+          duration: 0.3,
+          yoyo: true,
+          repeat: 1,
+        }
       );
     }
   }

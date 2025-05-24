@@ -16,7 +16,7 @@ export const chargeurPoi = {
         imgPath: "/img/bellecour.jpg",
         description:
           "La plus grande place piétonne d'Europe, offrant une vue dégagée sur la colline de Fourvière et ses illuminations.",
-        etiquette: [
+        etiquettes: [
           {
             heading: 100,
             pitch: 40,
@@ -35,6 +35,13 @@ export const chargeurPoi = {
         imgPath: "/img/terreaux.jpg",
         description:
           "Place historique avec la fontaine Bartholdi et l'Hôtel de Ville, souvent mise en lumière lors d'événements culturels.",
+        etiquettes: [
+          {
+            heading: 100,
+            pitch: 40,
+            text: "This is an example text",
+          },
+        ],
       },
       {
         id: "fourviere",
@@ -47,6 +54,13 @@ export const chargeurPoi = {
         imgPath: "/img/fourviere.jpg",
         description:
           "Perchée sur la colline, la basilique offre un panorama exceptionnel sur Lyon, particulièrement spectaculaire la nuit.",
+        etiquettes: [
+          {
+            heading: 100,
+            pitch: 40,
+            text: "This is an example text",
+          },
+        ],
       },
       {
         id: "institut",
@@ -59,6 +73,13 @@ export const chargeurPoi = {
         imgPath: "/img/institut.jpg",
         description:
           "Berceau du cinéma, l'Institut Lumière célèbre l'art de la lumière et du mouvement dans un cadre historique.",
+        etiquettes: [
+          {
+            heading: 100,
+            pitch: 40,
+            text: "This is an example text",
+          },
+        ],
       },
       {
         id: "quais",
@@ -71,6 +92,13 @@ export const chargeurPoi = {
         imgPath: "/img/quais.jpg",
         description:
           "Les quais du Rhône transformés en promenade lumineuse le long du fleuve, offrant une ambiance paisible en soirée.",
+        etiquettes: [
+          {
+            heading: 100,
+            pitch: 40,
+            text: "This is an example text",
+          },
+        ],
       },
     ];
   },
