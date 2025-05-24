@@ -4,13 +4,11 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
       target: production
     ports:
       - "5000:80"
-      
-    volumes:
-      - ./nginx.prod.conf:/etc/nginx/nginx.conf
+    env_file: .env.production
     depends_on:
       - api
     restart: unless-stopped
@@ -18,7 +16,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
       target: api
     env_file: .env.production
     volumes:

@@ -17,6 +17,7 @@ This document provides instructions for deploying the application in a productio
 
 2. Make sure you have the production configuration files:
    - `docker-compose.prod.yml`
+   - `Dockerfile.prod`
    - `nginx.prod.conf`
    - `.env.production`
 

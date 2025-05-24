@@ -22,6 +22,11 @@ if [ ! -f "docker-compose.prod.yml" ]; then
     exit 1
 fi
 
+if [ ! -f "Dockerfile.prod" ]; then
+    echo "❌ Le fichier Dockerfile.prod est manquant."
+    exit 1
+fi
+
 if [ ! -f "nginx.prod.conf" ]; then
     echo "❌ Le fichier nginx.prod.conf est manquant."
     exit 1
